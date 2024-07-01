@@ -1,14 +1,14 @@
 package shop.household.client.create.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpHeaders;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import shop.household.client.create.service.ClientCreateService;
 import shop.household.model.ClientCreateRequestDto;
 import shop.household.model.ClientCreateResponseDto;
+import shop.household.model.ErrorDto;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,7 +18,18 @@ public class RequestController {
     private final ClientCreateService clientCreateService;
 
     @PostMapping
-    public ClientCreateResponseDto create(@Valid @RequestBody ClientCreateRequestDto client) {
-        return clientCreateService.create(client);
+    public ClientCreateResponseDto create(@RequestHeader HttpHeaders headers, @Validated @RequestBody ClientCreateRequestDto requestDto, BindingResult result) {
+        if (result.hasErrors()) {
+            return new ClientCreateResponseDto()
+                    .status(false)
+                    .error(new ErrorDto().code(400).message("Validation error"));
+        }
+        try {
+            return clientCreateService.create(requestDto);
+        } catch (Exception e) {
+            return new ClientCreateResponseDto()
+                    .status(false)
+                    .error(new ErrorDto().code(422).message("Error add client to db"));
+        }
     }
 }
