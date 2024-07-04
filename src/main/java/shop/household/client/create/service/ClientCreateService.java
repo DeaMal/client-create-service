@@ -1,6 +1,7 @@
 package shop.household.client.create.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import shop.household.client.create.mapper.ClientMapper;
 import shop.household.client.create.repository.ClientRepository;
@@ -13,7 +14,7 @@ public class ClientCreateService {
 
     private final ClientRepository clientRepository;
 
-    public ClientCreateResponseDto create(ClientCreateRequestDto clientDto) throws Exception {
+    public ClientCreateResponseDto create(ClientCreateRequestDto clientDto) throws DataAccessException {
         var client = clientRepository.save(ClientMapper.INSTANCE.requestDtoToClient(clientDto));
         return new ClientCreateResponseDto()
                 .status(true)
