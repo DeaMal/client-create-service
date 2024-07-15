@@ -17,8 +17,12 @@ public interface ClientMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "phoneExtra", source = "requestDto.phoneExtra")
+    @Mapping(target = "totalOrders", constant = "0")
+    @Mapping(target = "totalSpent", expression = "java(java.math.BigDecimal.ZERO)")
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "lastOrderDate", ignore = true)
     @Mapping(target = "createAt", ignore = true)
-//    @Mapping(target = "createAt", expression = "java(new Timestamp(System.currentTimeMillis()))")
+//    @Mapping(target = "createAt", expression = "java(new java.sql.Timestamp(System.currentTimeMillis()))")
     Client requestDtoToClient(ClientCreateRequestDto requestDto);
 
     @Mapping(target = "phoneExtra", source = "client.phoneExtra")
