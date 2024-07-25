@@ -92,7 +92,7 @@ You need find your IP using `ipconfig` for set in `DATASOURCE_HOST`
   ```
   kubectl apply -f .\k8s\ingress.yaml
   ```
-    - to watch services:
+    - to watch ingress:
       ```
       kubectl get ingress
       ```
@@ -100,24 +100,30 @@ You need find your IP using `ipconfig` for set in `DATASOURCE_HOST`
 #### Using the service
 
 To use the service, use `Postman` or a similar application, you can use `cURL`.
-`POST` request to `localhost:8888`,
+`POST` request to
+
+    localhost:8888/client/create
+
 example request body:
 ```
 {
     "firstname": "John",
     "lastname": "Black",
     "phone": "+1343782648",
-    "email": "mr.grey@spyder.hd"
+    "phone_extra": "(462)73287662",
+    "email": "mr.grey@spyder.hd",
+    "address": "Earth, big field in Asia",
+    "notes": "White man 81 years old"
 }
 ```
 
 To use the service without `kubernetes` and `docker` use swagger interface:
 
-http://localhost:8080/swagger-ui.html
+    http://localhost:8080/swagger-ui.html
 
 for `docker` without `kubernetes`:
 
-http://localhost:8081/swagger-ui.html
+    http://localhost:8081/swagger-ui.html
 
 #### Delete service
 
