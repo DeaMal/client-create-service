@@ -2,10 +2,7 @@ package shop.household.client.create.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -23,23 +20,39 @@ import java.util.Objects;
 public class ClientCreateService {
 
     private final ClientRepository clientRepository;
-    private final RestTemplate restTemplate;
 
     public ClientCreateResponseDto create(ClientCreateRequestDto clientDto) throws DataAccessException, RestClientException {
-        String url = "http://client-get-service.default.svc.cluster.local:80/client/get";
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
-        ClientDto requestBody = ClientDto.builder().email(clientDto.getEmail()).build();
-        HttpEntity<ClientDto> requestEntity = new HttpEntity<>(requestBody, headers);
-        ResponseEntity<ClientCreateResponseDto> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, ClientCreateResponseDto.class);
-        if (Objects.requireNonNull(responseEntity.getBody()).getStatus()) {
-            return new ClientCreateResponseDto()
-                    .status(false)
-                    .error(new ErrorDto().code(400).message("ERROR: Client with Email '" + clientDto.getEmail() + "' already exist"));
+        ResponseEntity<ClientCreateResponseDto> emailIsExist = checkUniqueEmail(clientDto.getEmail());
+        if (emailIsExist.getStatusCode() != HttpStatus.OK) {
+            return createResponseDto(false, emailIsExist.getStatusCode().value(), "ERROR: client-get-service: " + emailIsExist.getStatusCode());
+        } else if (Objects.requireNonNull(emailIsExist.getBody()).getStatus()) {
+            return createResponseDto(false, 302, "ERROR: Client with Email '" + clientDto.getEmail() + "' already exist");
         }
         var client = clientRepository.save(ClientMapper.INSTANCE.requestDtoToClient(clientDto));
-        return new ClientCreateResponseDto()
-                .status(true)
-                .client(ClientMapper.INSTANCE.clientToClientDto(client));
+        return createResponseDto(true, ClientMapper.INSTANCE.clientToClientDto(client));
+    }
+
+    public ClientCreateResponseDto createResponseDto(Boolean status, Integer errorCode, String errorMessage) {
+        return ClientCreateResponseDto.builder()
+                .status(status)
+                .error(new ErrorDto().code(errorCode).message(errorMessage))
+                .build();
+    }
+
+    public ClientCreateResponseDto createResponseDto(Boolean status, ClientDto client) {
+        return ClientCreateResponseDto.builder()
+                .status(status)
+                .client(client)
+                .build();
+    }
+
+    private ResponseEntity<ClientCreateResponseDto> checkUniqueEmail(String email) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        String requestUrl = "http://client-get-service/client/get";
+        ClientDto requestBody = ClientDto.builder().email(email).build();
+        HttpEntity<ClientDto> requestEntity = new HttpEntity<>(requestBody, headers);
+        return restTemplate.exchange(requestUrl, HttpMethod.POST, requestEntity, ClientCreateResponseDto.class);
     }
 }

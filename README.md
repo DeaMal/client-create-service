@@ -44,7 +44,7 @@ docker run:
 
 - Install `kind` according to the instructions on the website https://kind.sigs.k8s.io/
 
-- Сheck if `kubectl` is installed
+- Check if `kubectl` is installed
   ```
   kubectl version
   ```
@@ -76,6 +76,10 @@ docker run:
       ```
       kubectl delete pods --all
       ```
+    - to kill deployments:
+      ```
+      kubectl delete deployments client-create-service
+      ```
     - to kill all deployments:
       ```
       kubectl delete deployments --all
@@ -84,21 +88,17 @@ docker run:
       ```
       kubectl port-forward <pod-name> 8899:8080
       ```
-- Start service
-  ```
-  kubectl apply -f .\k8s\service.yaml
-  ```
     - to watch services:
       ```
       kubectl get service
       ```
-- Start ingress
-  ```
-  kubectl apply -f .\k8s\ingress.yaml
-  ```
     - to watch ingress:
       ```
       kubectl get ingress
+      ```
+    - to watch all:
+      ```
+      kubectl get all
       ```
 
 #### Using the service
