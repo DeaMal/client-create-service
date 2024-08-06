@@ -10,8 +10,8 @@ import java.sql.Timestamp;
 @Accessors(chain = true)
 @Entity
 @Table(
-        name = "client", schema = "shop"
-//        , uniqueConstraints = @UniqueConstraint(columnNames = {"firstname", "lastname"})
+        name = "client", schema = "shop",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"firstname", "lastname"})
 )
 public class Client {
     @Id
@@ -30,7 +30,7 @@ public class Client {
     @Column(name = "phone_extra")
     private String phone_extra;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false)
     private String email;
 
     @Column(name = "address")
