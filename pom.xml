@@ -7,7 +7,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.3.1</version>
-		<relativePath/>
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
 	<groupId>shop.household</groupId>
@@ -56,17 +56,6 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>org.mapstruct</groupId>
-			<artifactId>mapstruct</artifactId>
-			<version>1.6.0.Beta2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.mapstruct</groupId>
-			<artifactId>mapstruct-processor</artifactId>
-			<version>1.6.0.Beta2</version>
-			<scope>provided</scope>
-		</dependency>
 
 		<dependency>
 			<groupId>shop.household</groupId>
@@ -84,19 +73,6 @@
 
 	<build>
 		<plugins>
-<!--			<plugin>-->
-<!--				<groupId>org.apache.maven.plugins</groupId>-->
-<!--				<artifactId>maven-compiler-plugin</artifactId>-->
-<!--				<configuration>-->
-<!--					<annotationProcessorPaths>-->
-<!--						<path>-->
-<!--							<groupId>org.mapstruct</groupId>-->
-<!--							<artifactId>mapstruct-processor</artifactId>-->
-<!--							<version>1.6.0.Beta2</version>-->
-<!--						</path>-->
-<!--					</annotationProcessorPaths>-->
-<!--				</configuration>-->
-<!--			</plugin>-->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
