@@ -16,16 +16,16 @@ public interface ClientMapper {
     ClientMapper INSTANCE = Mappers.getMapper(ClientMapper.class);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "phoneExtra", source = "requestDto.phoneExtra")
-    @Mapping(target = "createAt", ignore = true)
-//    @Mapping(target = "createAt", expression = "java(new Timestamp(System.currentTimeMillis()))")
+    @Mapping(target = "phone_extra", source = "requestDto.phoneExtra")
+    @Mapping(target = "create_at", ignore = true)
+//    @Mapping(target = "create_at", expression = "java(new Timestamp(System.currentTimeMillis()))")
     Client requestDtoToClient(ClientCreateRequestDto requestDto);
 
-    @Mapping(target = "phoneExtra", source = "client.phoneExtra")
+    @Mapping(target = "phoneExtra", source = "client.phone_extra")
     ClientDto clientToClientDto(Client client);
 
     @AfterMapping
     default void setAdditionalFields(@MappingTarget Client client) {
-        client.setCreateAt(new Timestamp(System.currentTimeMillis()));
+        client.setCreate_at(new Timestamp(System.currentTimeMillis()));
     }
 }
