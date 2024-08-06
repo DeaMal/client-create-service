@@ -22,10 +22,6 @@ For docker build you need account on https://hub.docker.com/
 
 You need find your IP using `ipconfig` for set in `DATASOURCE_HOST`
 
-    ipconfig getifaddr en0
-
-docker run:
-
     docker run -ti --rm -e DATASOURCE_HOST=192.168.56.1 -p 8081:8080 <your_account>/client-create-service:0.0.1
 
 #### Docker push:
