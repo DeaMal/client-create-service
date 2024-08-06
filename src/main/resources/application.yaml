@@ -2,7 +2,7 @@ spring:
   application:
     name: client-create-service
   datasource:
-    url: jdbc:postgresql://${DATASOURCE_HOST:localhost}:5432/postgres
+    url: jdbc:postgresql://${DATASOURCE_HOST:localhost}:5444/postgres
     username: postgres
     password: postgres
 server:

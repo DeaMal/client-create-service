@@ -10,6 +10,7 @@ import org.springframework.web.client.RestClientException;
 import shop.household.client.create.service.ClientCreateService;
 import shop.household.model.ClientCreateRequestDto;
 import shop.household.model.ClientCreateResponseDto;
+import shop.household.model.ErrorDto;
 
 import java.util.Objects;
 
@@ -23,14 +24,16 @@ public class RequestController {
     @PostMapping
     public ClientCreateResponseDto create(@RequestHeader HttpHeaders headers, @Validated @RequestBody ClientCreateRequestDto requestDto, BindingResult result) {
         if (result.hasErrors()) {
-            return clientCreateService.createResponseDto(false, 400, "Validation error: " + Objects.requireNonNull(result.getFieldError()).getField());
+            return new ClientCreateResponseDto()
+                    .status(false)
+                    .error(new ErrorDto().code(400).message("Validation error: " + Objects.requireNonNull(result.getFieldError()).getField()));
         }
         try {
             return clientCreateService.create(requestDto);
-        } catch (DataAccessException e) {
-            return clientCreateService.createResponseDto(false, 422, Objects.requireNonNull(e.getRootCause()).getMessage());
-        } catch (RestClientException e) {
-            return clientCreateService.createResponseDto(false, 503, e.getMessage());
+        } catch (DataAccessException | RestClientException e) {
+            return new ClientCreateResponseDto()
+                    .status(false)
+                    .error(new ErrorDto().code(422).message(Objects.requireNonNull(e.getRootCause()).getMessage()));
         }
     }
 }

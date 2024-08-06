@@ -5,7 +5,7 @@ metadata:
   labels:
     app: client-create-service
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: client-create-service
@@ -17,21 +17,8 @@ spec:
       containers:
         - name: client-create-service
           image: deamal/client-create-service:0.0.1
-          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
             - name: DATASOURCE_HOST
-              value: shop-database
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: client-create-service
-spec:
-  selector:
-    app: client-create-service
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 8080
+              value: 192.168.56.1
