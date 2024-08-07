@@ -1,6 +1,7 @@
 package shop.household.client.create.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,8 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class ClientCreateService {
-
+    @Value("${clients.client-get}")
+    private String requestUrl;
     private final ClientRepository clientRepository;
 
     public ClientCreateResponseDto create(ClientCreateRequestDto clientDto) throws DataAccessException, RestClientException {
@@ -50,7 +52,6 @@ public class ClientCreateService {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        String requestUrl = "http://client-get-service/client/get";
         ClientDto requestBody = ClientDto.builder().email(email).build();
         HttpEntity<ClientDto> requestEntity = new HttpEntity<>(requestBody, headers);
         return restTemplate.exchange(requestUrl, HttpMethod.POST, requestEntity, ClientCreateResponseDto.class);

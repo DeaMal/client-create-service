@@ -7,3 +7,6 @@ spring:
     password: postgres
 server:
   port: 8080
+clients:
+  client-get: http://localhost:8080/client/get
+#http://client-get-service/client/get
